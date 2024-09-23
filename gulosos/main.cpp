@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <list>
 
 using namespace std;
 
@@ -64,6 +65,65 @@ public:
          return &solucao;
      }
 };
+
+class gulosoInsercaoMaisBarata{
+private:
+    int size;
+    list<int> solucao;
+    vector<vector<int>> matrizAdjacencia;
+
+public:
+
+    gulosoInsercaoMaisBarata(string endereco){
+        ifstream file(endereco);
+         if (!file.is_open()) {
+             std::cerr << "Erro ao abrir o arquivo." << std::endl;
+             return;
+         }
+
+        file >> size;
+        matrizAdjacencia.resize(size);
+
+        for (int i = 0; i < size; ++i) {
+            matrizAdjacencia[i].resize(size);
+
+            for (int j = 0; j < size; ++j) {
+                file >> matrizAdjacencia[i][j];
+            }
+        }
+        file.close();
+    }
+
+    int calculaSolucao(int inicio1, int inicio2, int inicio3){
+        solucao.push_back(inicio1);
+        solucao.push_back(inicio2);
+        solucao.push_back(inicio3);
+
+        vector<bool> visitou(size);
+        for (int i = 0; i < size; ++i){
+            visitou[i] = false;
+        }
+        visitou[inicio1] = true;
+        visitou[inicio2] = true;
+        visitou[inicio3] = true;
+
+        for (int i = 0; i < size - 3; ++i){
+            int i_menorCusto = -1;
+            int j_menorCusto = -1;
+            for (int j : solucao){
+                
+                if (j != solucao.size() - 1){
+                    for (int k = 0; k < size; ++k){
+                        if (i_menorCusto == -1 || !visitou[k] &&
+                                matrizAdjacencia[])
+                    }
+                }
+            }
+        }
+    }
+    
+};
+
 
 int main() {
     string endereco;
