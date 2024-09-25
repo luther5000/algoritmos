@@ -69,7 +69,7 @@ public:
 class gulosoInsercaoMaisBarata{
 private:
     int size;
-    list<int> solucao;
+    vector<int> solucao;
     vector<vector<int>> matrizAdjacencia;
 
 public:
@@ -83,6 +83,7 @@ public:
 
         file >> size;
         matrizAdjacencia.resize(size);
+        solucao.resize(size);
 
         for (int i = 0; i < size; ++i) {
             matrizAdjacencia[i].resize(size);
@@ -108,17 +109,48 @@ public:
         visitou[inicio3] = true;
 
         for (int i = 0; i < size - 3; ++i){
-            int i_menorCusto = -1;
-            int j_menorCusto = -1;
-            for (int j : solucao){
-                
-                if (j != solucao.size() - 1){
-                    for (int k = 0; k < size; ++k){
-                        if (i_menorCusto == -1 || !visitou[k] &&
-                                matrizAdjacencia[])
+            int i_atual = -1;
+            int j_atual = -1;
+            int indexNovo = -1;
+
+            int menorValor = -1;
+
+            for (int j = 0; j < solucao.size(); ++j){ 
+                for (int k = 0; k < size; ++k){
+                    if (!visitou[k]){
+                        if (j != solucao.size() - 1) {
+                            int valorAtual = matrizAdjacencia[solucao[j]][k] + matrizAdjacencia[k][solucao[j+1]] - 
+                                matrizAdjacencia[solucao[j]][solucao[j+1]];
+
+                            if (i_atual == -1 ||
+                                valorAtual < menorValor) {
+                                i_atual = solucao[j];
+                                j_atual = solucao[j+1];
+                                indexNovo = k;
+                                menorValor = valorAtual;
+                            }
+                        } else{
+                                int valorAtual = matrizAdjacencia[solucao[j]][k] + matrizAdjacencia[k][solucao[0]] - 
+                                matrizAdjacencia[solucao[j]][solucao[0]];
+
+                            if (i_atual == -1 || !visitou[k] &&
+                                valorAtual < menorValor) {
+                                i_atual = solucao[j];
+                                j_atual = solucao[0];
+                                indexNovo = k;
+                                menorValor = valorAtual;
+                            }
+                        }
                     }
                 }
             }
+
+            if (i_atual > j_atual){
+                solucao.insert(solucao.begin() + i_atual+ 1, indexNovo);
+            } else
+                solucao.push_back(indexNovo);
+
+            visitou[indexNovo] = true;
         }
     }
     
