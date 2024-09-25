@@ -152,6 +152,17 @@ public:
 
             visitou[indexNovo] = true;
         }
+
+        int valorSolucao = 0;
+        for (int i = 0; i < size; ++i){
+            if (i != size - 1){
+                valorSolucao += matrizAdjacencia[solucao[i]][solucao[i+1]];
+            } else{
+                valorSolucao += matrizAdjacencia[solucao[i]][solucao[0]];
+            }
+        }
+        return valorSolucao;
+
     }
     
 };
@@ -165,7 +176,13 @@ int main() {
     cin >> inicio;
 
     guloso_menor_caminho guloso1(endereco);
+    int valGuloso1 = guloso1.calculaSolucao(inicio);
+    
+    gulosoInsercaoMaisBarata guloso2(endereco);
+    int valGuloso2 = guloso2.calculaSolucao(0, 1, 2);
 
-    cout << guloso1.calculaSolucao(inicio);
+    cout << "Guloso menor caminho: " << valGuloso1 << endl;
+    cout << "Guloso inserção mais barata: " << valGuloso2 << endl;
+
     return 0;
 }
