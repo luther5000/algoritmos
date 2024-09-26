@@ -1,80 +1,6 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <list>
+#include "gulosoInsercaoMaisBarata.hpp"
 
-using namespace std;
-
-class guloso_menor_caminho {
-private:
-    int size;
-    vector<vector<int>> matrizAdjacencia;
-    vector<int> solucao;
-
-public:
-     explicit guloso_menor_caminho(const string& endereco) {
-        ifstream file(endereco);
-
-         if (!file.is_open()) {
-             std::cerr << "Erro ao abrir o arquivo." << std::endl;
-             return;
-         }
-
-        file >> size;
-        matrizAdjacencia.resize(size);
-        solucao.resize(size + 1);
-
-        for (int i = 0; i < size; ++i) {
-            matrizAdjacencia[i].resize(size);
-
-            for (int j = 0; j < size; ++j) {
-                file >> matrizAdjacencia[i][j];
-            }
-        }
-        file.close();
-    }
-
-    int calculaSolucao(const int inicio) {
-         int i = inicio;
-         solucao[0] = inicio;
-         int custo = 0;
-
-         vector<bool> visitou(size);
-         for (int k = 0; k < size; ++k)
-             visitou[k] = false;
-
-        for (int k = 0; k < size; ++k) {
-            int j = 0;
-            int indiceMenorValor = -1;
-            while (j < size) {
-                if (indiceMenorValor < 0 || !visitou[j] &&
-                    matrizAdjacencia[i][j] < matrizAdjacencia[i][indiceMenorValor]) {
-                    indiceMenorValor = j;
-                }
-                ++j;
-            }
-            solucao[k + 1] = indiceMenorValor;
-            custo += matrizAdjacencia[i][indiceMenorValor];
-
-            i = indiceMenorValor;
-        }
-         return custo;
-    }
-
-    vector<int> *getSolucao() {
-         return &solucao;
-     }
-};
-
-class gulosoInsercaoMaisBarata{
-private:
-    int size;
-    vector<int> solucao;
-    vector<vector<int>> matrizAdjacencia;
-
-public:
-
-    gulosoInsercaoMaisBarata(string endereco){
+    gulosoInsercaoMaisBarata::gulosoInsercaoMaisBarata(string endereco){
         ifstream file(endereco);
          if (!file.is_open()) {
              std::cerr << "Erro ao abrir o arquivo." << std::endl;
@@ -95,7 +21,7 @@ public:
         file.close();
     }
 
-    int calculaSolucao(int inicio1, int inicio2, int inicio3){
+    int gulosoInsercaoMaisBarata::calculaSolucao(int inicio1, int inicio2, int inicio3){
         solucao.push_back(inicio1);
         solucao.push_back(inicio2);
         solucao.push_back(inicio3);
@@ -164,25 +90,3 @@ public:
         return valorSolucao;
 
     }
-    
-};
-
-
-int main() {
-    string endereco;
-    int inicio;
-
-    cin >> endereco;
-    cin >> inicio;
-
-    guloso_menor_caminho guloso1(endereco);
-    int valGuloso1 = guloso1.calculaSolucao(inicio);
-    
-    gulosoInsercaoMaisBarata guloso2(endereco);
-    int valGuloso2 = guloso2.calculaSolucao(0, 1, 2);
-
-    cout << "Guloso menor caminho: " << valGuloso1 << endl;
-    cout << "Guloso inserção mais barata: " << valGuloso2 << endl;
-
-    return 0;
-}
